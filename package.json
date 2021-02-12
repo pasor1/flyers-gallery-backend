@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fast-csv/parse": "^4.3.6",
+    "moment-timezone": "^0.5.33",
     "serverless-s3-sync": "^1.16.1"
   }
 }

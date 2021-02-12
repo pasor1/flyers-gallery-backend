@@ -3,6 +3,8 @@ const fs = require('fs');
 const csv = require('@fast-csv/parse');
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
+const moment = require('moment-timezone');
+const timeZone = 'Europe/Rome';
 
 module.exports.get = (event, context, callback) => {
   const s3Params = {
@@ -10,9 +12,12 @@ module.exports.get = (event, context, callback) => {
     Key: 'flyers_data.csv',
   };
   const output = [];
+  let outputNotPublished = false; // output also record with is_published = 0
+  let outputExpired = false; // output also record with end_date < now
   let counter = 0;
   let start = 0;
   let limit = 100;
+  const dateNow = new Date();
 
   // eval query param
   if (event.queryStringParameters) {
@@ -21,6 +26,12 @@ module.exports.get = (event, context, callback) => {
     }
     if (event.queryStringParameters.page) {
       start = (+event.queryStringParameters.page - 1) * limit;
+    }
+    if (event.queryStringParameters.notpublished === '1') {
+      outputNotPublished = true;
+    }
+    if (event.queryStringParameters.expired === '1') {
+      outputExpired = true;
     }
   }
 
@@ -36,12 +47,15 @@ module.exports.get = (event, context, callback) => {
       callback(null, response);
     })
     .on('data', row => {
-      if (counter >= start && counter < start + limit) {
-        output.push(row);
-      } else if (counter >= start + limit) {
-        readStream.destroy();
+      const endDate = moment.tz(row.end_date, timeZone);
+      if ((outputNotPublished || row.is_published === '1') && (outputExpired || endDate > dateNow)) {
+        if (counter >= start && counter < start + limit) {
+          output.push(row);
+        } else if (counter >= start + limit) {
+          readStream.destroy();
+        }
+        counter++;
       }
-      counter++;
     })
     .on('close', () => {
       const response = {
