@@ -12,7 +12,7 @@ module.exports.get = (event, context, callback) => {
   const output = [];
   let counter = 0;
   let start = 0;
-  let limit = 20;
+  let limit = 100;
 
   // eval query param
   if (event.queryStringParameters) {
