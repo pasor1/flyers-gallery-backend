@@ -1,0 +1,15 @@
+{
+  "name": "shopfully-test-backend",
+  "version": "1.0.0",
+  "description": "Serverless API for shopfully test",
+  "author": "Pasini Simone",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pasor1/serverless-aws-lambda-api.git"
+  },
+  "dependencies": {
+    "@fast-csv/parse": "^4.3.6",
+    "serverless-s3-sync": "^1.16.1"
+  }
+}

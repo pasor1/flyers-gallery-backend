@@ -1,0 +1,42 @@
+app: shopfully-test-backend
+service: shopfully-test-backend
+frameworkVersion: '2'
+
+package:
+  exclude:
+    - csv/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: eu-south-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:GetObject'
+      Resource: "arn:aws:s3:::shopfully-test-backend-csv/*"
+
+functions:
+  get:
+    handler: api/get.get
+    events:
+      - httpApi:
+          path: /api/flyers
+          method: get
+
+resources:
+  Resources:
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: shopfully-test-backend-csv
+
+plugins:
+  - serverless-s3-sync
+
+custom:
+  s3Sync:
+    - bucketName: shopfully-test-backend-csv
+      localDir: csv
