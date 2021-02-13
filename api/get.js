@@ -5,12 +5,12 @@ const aws = require('aws-sdk');
 const s3 = new aws.S3();
 const moment = require('moment-timezone');
 const timeZone = 'Europe/Rome';
+const s3Params = {
+  Bucket: 'shopfully-test-backend-csv',
+  Key: 'flyers_data.csv',
+};
 
 module.exports.get = (event, context, callback) => {
-  const s3Params = {
-    Bucket: 'shopfully-test-backend-csv',
-    Key: 'flyers_data.csv',
-  };
   const output = [];
   let outputNotPublished = false; // output also record with is_published = 0
   let outputExpired = false; // output also record with end_date < now
@@ -52,7 +52,7 @@ module.exports.get = (event, context, callback) => {
         if (counter >= start && counter < start + limit) {
           output.push(row);
         } else if (counter >= start + limit) {
-          readStream.destroy();
+          readStream.destroy(); // destroy before cosuming all stream
         }
         counter++;
       }
