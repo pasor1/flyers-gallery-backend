@@ -41,7 +41,11 @@ module.exports.get = (event, context, callback) => {
     .on('error', error => {
       const response = {
         statusCode: error.statusCode || 501,
-        headers: { 'Content-Type': 'text/plain' },
+        headers: {
+          'Content-Type': 'text/plain',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: 'System error...',
       };
       callback(null, response);
@@ -60,7 +64,11 @@ module.exports.get = (event, context, callback) => {
     .on('close', () => {
       const response = {
         statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify(output),
       };
       callback(null, response);
@@ -68,7 +76,11 @@ module.exports.get = (event, context, callback) => {
     .on('finish', () => {
       const response = {
         statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify(output),
       };
       callback(null, response);
