@@ -12,6 +12,7 @@ provider:
   lambdaHashingVersion: 20201221
   stage: dev
   region: eu-south-1
+  
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -22,9 +23,10 @@ functions:
   get:
     handler: api/get.get
     events:
-      - httpApi:
+      - http:
           path: /api/flyers
           method: get
+          cors: true
 
 resources:
   Resources:
