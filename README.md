@@ -9,7 +9,9 @@ Dependencies installation: `npm install`
 
 ## Deploy
 
-Install and configure serverless (If you don't have it): `npm install -g serverless` 
+Youn need an AWS account.
+
+Install and configure [Serverless Framwork](https://www.serverless.com/framework/docs/getting-started/) (If you don't have it): `npm install -g serverless` 
 
 Set you favotite AWS region in "serverless.yml"
 
